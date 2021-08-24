@@ -4,20 +4,6 @@ import Todo from "./components/Todo";
 import React, { useState } from "react";
 import { nanoid } from "nanoid";
 
-const FILTER_MAP = {
-  All: () => true,
-  Active: (task) => !task.completed,
-  Completed: (task) => task.completed,
-};
-const FILTER_NAMES = Object.keys(FILTER_MAP);
-const filterList = FILTER_NAMES.map((name) => (
-  <FilterButton
-    key={name}
-    name={name}
-    isPressed={name === filter}
-    setFilter={setFilter}
-  />
-));
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState("All");
@@ -33,6 +19,21 @@ function App(props) {
     });
     setTasks(updatedTasks);
   }
+
+  const FILTER_MAP = {
+    All: () => true,
+    Active: (task) => !task.completed,
+    Completed: (task) => task.completed,
+  };
+  const FILTER_NAMES = Object.keys(FILTER_MAP);
+  const filterList = FILTER_NAMES.map((name) => (
+    <FilterButton
+      key={name}
+      name={name}
+      isPressed={name === filter}
+      setFilter={setFilter}
+    />
+  ));
   const taskList = tasks
     .filter(FILTER_MAP[filter])
     .map((task) => (
@@ -46,9 +47,7 @@ function App(props) {
         editTask={editTask}
       />
     ));
-  const filterList = FILTER_NAMES.map((name) => (
-    <FilterButton key={name} name={name} />
-  ));
+
   const tasksNoun = taskList.length !== 1 ? "tasks" : "task";
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
 
